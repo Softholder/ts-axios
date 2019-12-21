@@ -1,4 +1,4 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 // 编码函数
 function encode(val: string): string {
@@ -49,7 +49,7 @@ export function buildURL(url: string, params?: any): string {
         // 由于使用了类型谓词，编辑器会提示toISOString方法
         // 如果值是Date对象转换为ISOString
         val = val.toISOString()
-      } else if (isObject(val)) {
+      } else if (isPlainObject(val)) {
         // 如果是对象转换为JSON字符串
         val = JSON.stringify(val)
       }

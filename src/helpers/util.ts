@@ -8,7 +8,12 @@ export function isDate(val: any): val is Date {
 }
 
 // 是否为Object
-export function isObject(val: any): val is Object {
-  // typeof null === 'object'为true，需要先判断不是null
-  return val !== null && typeof val === 'object'
+// export function isObject(val: any): val is Object {
+//   // typeof null === 'object'为true，需要先判断不是null
+//   return val !== null && typeof val === 'object'
+// }
+
+// 是否为普通对象（不包含ArrayBuffer,Blob等）
+export function isPlainObject(val: any): val is Object {
+  return toString.call(val) === '[object Object]'
 }
