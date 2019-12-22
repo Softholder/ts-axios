@@ -1,13 +1,13 @@
 // 定义axios
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
-import xhr from './core/xhr'
-import { buildURL } from './helpers/url'
-import { transformRequest, transformReponse } from './helpers/data'
-import { processHeaders } from './helpers/header'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
+import xhr from './xhr'
+import { buildURL } from '../helpers/url'
+import { transformRequest, transformReponse } from '../helpers/data'
+import { processHeaders } from '../helpers/header'
 
 // config为配置包含method,url,params等
 // 通过AxiosRequestConfig接口来约束config的类型
-function axios(config: AxiosRequestConfig): AxiosPromise {
+export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   // 先将config处理完毕再通过AJAX发送
   // 调用完xhr后对响应数据再做一次处理
   processConfig(config)
@@ -45,5 +45,3 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transformReponse(res.data)
   return res
 }
-
-export default axios
