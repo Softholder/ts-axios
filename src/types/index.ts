@@ -26,9 +26,9 @@ export interface AxiosRequestConfig {
   timeout?: number
 }
 
-// 响应类型
-export interface AxiosResponse {
-  data: any
+// 响应类型，通过泛型的方式支持多种类型,泛型的默认类型为any
+export interface AxiosResponse<T = any> {
+  data: T
   status: number
   statusText: string
   headers: any
@@ -37,7 +37,7 @@ export interface AxiosResponse {
 }
 
 // axios函数返回对象类型
-export interface AxiosPromise extends Promise<AxiosResponse> {}
+export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 // Axios错误类型
 export interface AxiosError extends Error {
@@ -51,28 +51,30 @@ export interface AxiosError extends Error {
 // Axios接口
 export interface Axios {
   // request方法进行了重载，但对外的接口保持一致；实现可兼容不同的接口调用
-  request(config: AxiosRequestConfig): AxiosPromise
+  // 泛型，请求值为什么类型，返回值均可拿到该类型
+  // 通过泛型可以让自定义请求参数的类型，使其多样化
+  request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
-  get(url: string, config?: AxiosRequestConfig): AxiosPromise
+  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  delete(url: string, config?: AxiosRequestConfig): AxiosPromise
+  delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  head(url: string, config?: AxiosRequestConfig): AxiosPromise
+  head<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  options(url: string, config?: AxiosRequestConfig): AxiosPromise
+  options<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
 // 混合对象，既有属性方法又为函数类型
 export interface AxiosInstance extends Axios {
   // 参数为AxiosRequestConfig类型的config，返回值为AxiosPromise类型
-  (config: AxiosRequestConfig): AxiosPromise
+  <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   // 函数重载，第一个参数为url，第二个为可选的config
-  (url: string, config?: AxiosRequestConfig): AxiosPromise
+  <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
