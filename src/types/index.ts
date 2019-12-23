@@ -69,5 +69,6 @@ export interface Axios {
 
 // 混合对象，既有属性方法又为函数类型
 export interface AxiosInstance extends Axios {
+  // 参数为AxiosRequestConfig类型的config，返回值为AxiosPromise类型
   (config: AxiosRequestConfig): AxiosPromise
 }

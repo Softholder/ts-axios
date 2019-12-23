@@ -17,3 +17,11 @@ export function isDate(val: any): val is Date {
 export function isPlainObject(val: any): val is Object {
   return toString.call(val) === '[object Object]'
 }
+
+export function extend<T, U>(to: T, from: U): T & U {
+  for (const key in from) {
+    // to断言为T & U类型以便赋值，括号开始前须有;
+    ;(to as T & U)[key] = from[key] as any
+  }
+  return to as T & U
+}
