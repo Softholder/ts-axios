@@ -50,6 +50,7 @@ export interface AxiosError extends Error {
 
 // Axios接口
 export interface Axios {
+  // request方法进行了重载，但对外的接口保持一致；实现可兼容不同的接口调用
   request(config: AxiosRequestConfig): AxiosPromise
 
   get(url: string, config?: AxiosRequestConfig): AxiosPromise
@@ -71,4 +72,7 @@ export interface Axios {
 export interface AxiosInstance extends Axios {
   // 参数为AxiosRequestConfig类型的config，返回值为AxiosPromise类型
   (config: AxiosRequestConfig): AxiosPromise
+
+  // 函数重载，第一个参数为url，第二个为可选的config
+  (url: string, config?: AxiosRequestConfig): AxiosPromise
 }

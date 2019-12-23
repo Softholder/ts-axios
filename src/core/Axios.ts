@@ -2,7 +2,18 @@ import { AxiosPromise, AxiosRequestConfig, Method } from '../types'
 import dispatchRequest from './dispatchRequest'
 
 export default class Axios {
-  request(config: AxiosRequestConfig): AxiosPromise {
+  // axios内部指向request方法，因此需要对request做重载
+  request(url: any, config?: any): AxiosPromise {
+    // url为string类型，config为空
+    if (typeof url === 'string') {
+      if (!config) {
+        config = {}
+      }
+      config.url = url
+    } else {
+      // url不为string，那么即为config对象，此时config为undefined需将url指向config
+      config = url
+    }
     return dispatchRequest(config)
   }
 
