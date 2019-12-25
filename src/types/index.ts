@@ -50,6 +50,12 @@ export interface AxiosError extends Error {
 
 // Axios接口
 export interface Axios {
+  // 接口定义添加interceptors定义
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
+
   // request方法进行了重载，但对外的接口保持一致；实现可兼容不同的接口调用
   // 泛型，请求值为什么类型，返回值均可拿到该类型
   // 通过泛型可以让自定义请求参数的类型，使其多样化
@@ -82,7 +88,8 @@ export interface AxiosInstance extends Axios {
 // 拦截器接口类型
 export interface AxiosInterceptorManager<T> {
   // 创建一个拦截器时，返回的是其id
-  use(resolved: ResolvedFn<T>, rejected: RejectedFn): number
+  // rejected为可选参数
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
   // 根据id删除拦截器
   eject(id: number): void
 }

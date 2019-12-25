@@ -11,6 +11,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
   // 先将config处理完毕再通过AJAX发送
   // 调用完xhr后对响应数据再做一次处理
   processConfig(config)
+  // 在dispatchRequest函数中将请求config处理为响应res
   return xhr(config).then(res => {
     return transformResponseData(res)
   })

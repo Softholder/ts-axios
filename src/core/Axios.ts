@@ -1,7 +1,37 @@
-import { AxiosPromise, AxiosRequestConfig, Method } from '../types'
+import {
+  AxiosPromise,
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method,
+  ResolvedFn,
+  RejectedFn
+} from '../types'
 import dispatchRequest from './dispatchRequest'
+import InterceptorManager from './InterceptorManager'
+
+// 拦截器接口类型
+interface Interceptors {
+  request: InterceptorManager<AxiosRequestConfig>
+  response: InterceptorManager<AxiosResponse>
+}
+
+// 拦截器链接口类型
+interface PromiseChain<T> {
+  resolved: ResolvedFn<T> | ((config: AxiosRequestConfig) => AxiosPromise)
+  rejected?: RejectedFn
+}
 
 export default class Axios {
+  interceptors: Interceptors
+
+  constructor() {
+    // 调用request.use增加请求拦截器，调用response.use增加响应拦截器
+    this.interceptors = {
+      request: new InterceptorManager<AxiosRequestConfig>(),
+      response: new InterceptorManager<AxiosResponse>()
+    }
+  }
+
   // axios内部指向request方法，因此需要对request做重载
   request(url: any, config?: any): AxiosPromise {
     // url为string类型，config为空
@@ -14,7 +44,37 @@ export default class Axios {
       // url不为string，那么即为config对象，此时config为undefined需将url指向config
       config = url
     }
-    return dispatchRequest(config)
+
+    // 类型既可能是AxiosRequestConfig又可能是AxiosPromise，写为any类型
+    const chain: PromiseChain<any>[] = [
+      {
+        resolved: dispatchRequest,
+        rejected: undefined
+      }
+    ]
+
+    // 遍历request往拦截器链上添加interceptor
+    // 请求拦截器，后添加的先执行
+    this.interceptors.request.forEach(interceptor => {
+      chain.unshift(interceptor)
+    })
+
+    // 响应拦截器，先添加的先执行
+    this.interceptors.response.forEach(interceptor => {
+      chain.push(interceptor)
+    })
+
+    //
+    let promise = Promise.resolve(config)
+
+    while (chain.length) {
+      // chain.shift()返回的可能是PromiseChain也可能是undefined，需要断言不为空
+      const { resolved, rejected } = chain.shift()!
+      // 利用promise的特性实现链式调用
+      promise = promise.then(resolved, rejected)
+    }
+
+    return promise
   }
 
   get(url: string, config?: AxiosRequestConfig): AxiosPromise {
