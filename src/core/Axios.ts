@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './InterceptorManager'
+import mergeConfig from './mergeConfig'
 
 // 拦截器接口类型
 interface Interceptors {
@@ -22,9 +23,11 @@ interface PromiseChain<T> {
 }
 
 export default class Axios {
+  defaults: AxiosRequestConfig
   interceptors: Interceptors
 
-  constructor() {
+  constructor(initConfig: AxiosRequestConfig) {
+    this.defaults = initConfig
     // 调用request.use增加请求拦截器，调用response.use增加响应拦截器
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
@@ -44,6 +47,8 @@ export default class Axios {
       // url不为string，那么即为config对象，此时config为undefined需将url指向config
       config = url
     }
+
+    config = mergeConfig(this.defaults, config)
 
     // 类型既可能是AxiosRequestConfig又可能是AxiosPromise，写为any类型
     const chain: PromiseChain<any>[] = [

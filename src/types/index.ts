@@ -24,6 +24,8 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+
+  [propName: string]: any
 }
 
 // 响应类型，通过泛型的方式支持多种类型,泛型的默认类型为any
@@ -50,6 +52,7 @@ export interface AxiosError extends Error {
 
 // Axios接口
 export interface Axios {
+  defaults: AxiosRequestConfig
   // 接口定义添加interceptors定义
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>

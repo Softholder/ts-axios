@@ -3,7 +3,7 @@ import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
 import { buildURL } from '../helpers/url'
 import { transformRequest, transformReponse } from '../helpers/data'
-import { processHeaders } from '../helpers/header'
+import { processHeaders, flattenHeaders } from '../helpers/header'
 
 // config为配置包含method,url,params等
 // 通过AxiosRequestConfig接口来约束config的类型
@@ -17,12 +17,14 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
   })
 }
 
-// 处理config中的url，params
+// 处理config中的url，params,data
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transformURL(config)
   // 要先处理headers，避免transformRequestData将其转换为JSON字符串
   config.headers = transformHeaders(config)
   config.data = transformRequestData(config)
+  // 把headers中需要的属性值提取出来，不需要的删除
+  config.headers = flattenHeaders(config.headers, config.method!)
 }
 
 // 处理url及params的函数
