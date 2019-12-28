@@ -92,6 +92,11 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+// Axios静态方法接口类型，创建Axios实例
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+}
+
 // 拦截器接口类型
 export interface AxiosInterceptorManager<T> {
   // 创建一个拦截器时，返回的是其id
