@@ -2,8 +2,11 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
 import { buildURL } from '../helpers/url'
-import { transformRequest, transformReponse } from '../helpers/data'
-import { processHeaders, flattenHeaders } from '../helpers/header'
+// import { transformRequest, transformReponse } from '../helpers/data'
+// import { processHeaders, flattenHeaders } from '../helpers/headers'
+import { flattenHeaders } from '../helpers/headers'
+
+import transform from './transform'
 
 // config为配置包含method,url,params等
 // 通过AxiosRequestConfig接口来约束config的类型
@@ -21,8 +24,9 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transformURL(config)
   // 要先处理headers，避免transformRequestData将其转换为JSON字符串
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
+  // config.headers = transformHeaders(config)
+  // 统一使用transform方法处理data和headers
+  config.data = transform(config.data, config.headers, config.transformRequest)
   // 把headers中需要的属性值提取出来，不需要的删除
   config.headers = flattenHeaders(config.headers, config.method!)
 }
@@ -33,18 +37,20 @@ function transformURL(config: AxiosRequestConfig): string {
   return buildURL(url!, params)
 }
 
-function transformRequestData(config: AxiosRequestConfig): any {
-  return transformRequest(config.data)
-}
+// function transformRequestData(config: AxiosRequestConfig): any {
+//   return transformRequest(config.data)
+// }
 
-function transformHeaders(config: AxiosRequestConfig): any {
-  // 不传headers时，默认为空对象（类型设置为普通对象才能继续后续逻辑）
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
+// function transformHeaders(config: AxiosRequestConfig): any {
+//   // 不传headers时，默认为空对象（类型设置为普通对象才能继续后续逻辑）
+//   const { headers = {}, data } = config
+//   return processHeaders(headers, data)
+// }
 
 // 将响应中的数据做处理，JSON字符串默认解析为对象
 function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformReponse(res.data)
+  // res.data = transformReponse(res.data)
+  // 通过transform处理响应数据
+  res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
 }

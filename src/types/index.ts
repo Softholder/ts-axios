@@ -24,6 +24,10 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+  // transformRequest允许在将请求数据发送到服务器之前对其进行修改，只适用于请求方法put、post和patch
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  // transformResponse允许在把响应数据传递给then或者catch之前对它们进行修改
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 
   [propName: string]: any
 }
@@ -106,4 +110,9 @@ export interface ResolvedFn<T> {
 // rejected函数类型
 export interface RejectedFn {
   (error: any): any
+}
+
+// transformRequest和transformResponse的接口类型
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }
