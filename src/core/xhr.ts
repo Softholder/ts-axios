@@ -5,7 +5,7 @@ import { createError } from '../helpers/error'
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   // 返回Promise对象，使得调用时可以使用then方法
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType, timeout } = config
+    const { data = null, url, method = 'get', headers, responseType, timeout, cancelToken } = config
 
     const request = new XMLHttpRequest()
     // 若请求配置中responseType存在，将其赋值给请求头
@@ -67,6 +67,16 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.setRequestHeader(name, headers[name])
       }
     })
+
+    // config中存在cancelToken时取消请求
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        // 取消请求
+        request.abort()
+        // 通过promise的reject函数将reason传出，catch时可捕获到错误
+        reject(reason)
+      })
+    }
 
     request.send(data)
 

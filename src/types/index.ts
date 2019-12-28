@@ -28,6 +28,8 @@ export interface AxiosRequestConfig {
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   // transformResponse允许在把响应数据传递给then或者catch之前对它们进行修改
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  // 添加cancelToken属性，传入时可取消请求
+  cancelToken?: CancelToken
 
   [propName: string]: any
 }
@@ -120,4 +122,33 @@ export interface RejectedFn {
 // transformRequest和transformResponse的接口类型
 export interface AxiosTransformer {
   (data: any, headers?: any): any
+}
+
+// CancelToken实例类型的接口定义
+export interface CancelToken {
+  promise: Promise<string>
+  // reason是传递给promise中resolve函数的参数值
+  reason?: string
+}
+
+// 取消方法的接口定义
+export interface Canceler {
+  (message?: string): void
+}
+
+// CancelToken类构造函数参数的接口定义
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+// CancelToken类静态方法source函数的返回值类型
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+// CancelToken类的类类型
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
 }
