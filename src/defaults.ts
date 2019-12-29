@@ -25,7 +25,11 @@ const defaults: AxiosRequestConfig = {
       // 直接返回处理后的响应数据
       return transformReponse(data)
     }
-  ]
+  ],
+
+  validateStatus(status: number): boolean {
+    return status >= 200 && status < 300
+  }
 }
 
 // 没有请求数据的方法

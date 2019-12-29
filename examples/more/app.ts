@@ -1,6 +1,7 @@
 import axios from '../../src/index'
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
+import { AxiosError } from '../../src/types'
 
 // XSRF demo
 // document.cookie = 'a=b'
@@ -91,13 +92,37 @@ import NProgress from 'nprogress'
 
 
 // auth demo
-axios.post('/more/post', {
-  a: 1
-}, {
-  auth: {
-    username: 'Yee',
-    password: '123456'
-  }
-}).then(res => {
-  console.log(res)
-})
+// axios.post('/more/post', {
+//   a: 1
+// }, {
+//   auth: {
+//     username: 'Yee',
+//     password: '123456'
+//   }
+// }).then(res => {
+//   console.log(res)
+// })
+
+
+// validateStatus demo
+axios
+  .get('/more/304')
+  .then(res => {
+    console.log(res)
+  })
+  .catch((e: AxiosError) => {
+    console.log(e.message)
+  })
+
+axios
+  .get('/more/304', {
+    validateStatus(status) {
+      return status >= 200 && status < 400
+    }
+  })
+  .then(res => {
+    console.log(res)
+  })
+  .catch((e: AxiosError) => {
+    console.log(e.message)
+  })
