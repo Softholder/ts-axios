@@ -11,6 +11,8 @@ import transform from './transform'
 // config为配置包含method,url,params等
 // 通过AxiosRequestConfig接口来约束config的类型
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  // 先检查是否使用过CancelToken取消请求
+  throwIfCancellationRequested(config)
   // 先将config处理完毕再通过AJAX发送
   // 调用完xhr后对响应数据再做一次处理
   processConfig(config)
@@ -53,4 +55,10 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
   // 通过transform处理响应数据
   res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }
