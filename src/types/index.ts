@@ -30,6 +30,8 @@ export interface AxiosRequestConfig {
   transformResponse?: AxiosTransformer | AxiosTransformer[]
   // 添加cancelToken属性，传入时可取消请求
   cancelToken?: CancelToken
+  // 跨域请求携带cookie时为true
+  withCredentials?: boolean
 
   [propName: string]: any
 }

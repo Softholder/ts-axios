@@ -5,7 +5,16 @@ import { createError } from '../helpers/error'
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   // 返回Promise对象，使得调用时可以使用then方法
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType, timeout, cancelToken } = config
+    const {
+      data = null,
+      url,
+      method = 'get',
+      headers,
+      responseType,
+      timeout,
+      cancelToken,
+      withCredentials
+    } = config
 
     const request = new XMLHttpRequest()
     // 若请求配置中responseType存在，将其赋值给请求头
@@ -16,6 +25,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     // 设置超时时间
     if (timeout) {
       request.timeout = timeout
+    }
+
+    // 设置跨域请求是否携带cookie
+    if (withCredentials) {
+      request.withCredentials = withCredentials
     }
 
     // 默认async参数为true，即异步请求
