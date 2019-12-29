@@ -1,6 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const multipart = require('connect-multiparty')
+const path = require('path')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -35,6 +37,14 @@ app.use(express.static(__dirname))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser)
+
+// 上传用到的中间件
+app.use(
+  multipart({
+    // 将上传文件都保存到当前目录的upload-file'文件夹下
+    uploadDir: path.resolve(__dirname, 'upload-file')
+  })
+)
 
 const router = express.Router()
 
@@ -187,5 +197,10 @@ function registerCancelRouter() {
 function registerMoreRouter() {
   router.get('/more/get', function (req, res) {
     res.json(req.cookies)
+  })
+
+  router.post('/more/upload', function(req, res) {
+    console.log(req.body, req.files)
+    res.end('upload success')
   })
 }

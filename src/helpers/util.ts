@@ -18,6 +18,11 @@ export function isPlainObject(val: any): val is Object {
   return toString.call(val) === '[object Object]'
 }
 
+// 判断是否为FormData类型
+export function isFormData(val: any): val is FormData {
+  return typeof val !== 'undefined' && val instanceof FormData
+}
+
 export function extend<T, U>(to: T, from: U): T & U {
   for (const key in from) {
     // to断言为T & U类型以便赋值，括号开始前须有;
