@@ -23,6 +23,13 @@ app.use(
 
 app.use(webpackHotMiddleware(compiler))
 
+// 设置浏览器端cookie值，与demo中xsrfCookieName的值要一致
+app.use(express.static(__dirname, {
+  setHeaders (res) {
+    res.cookie('XSRF-TOKEN-D', '1234abc')
+  }
+}))
+
 app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
