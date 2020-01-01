@@ -5,6 +5,7 @@ import defaults from './defaults'
 import mergeConfig from './core/mergeConfig'
 import CancelToken from './cancel/CancelToken'
 import Cancel, { isCancel } from './cancel/Cancel'
+import { createDiffieHellman } from 'crypto'
 
 function createInstance(config: AxiosRequestConfig): AxiosStatic {
   const context = new Axios(config)
@@ -26,5 +27,20 @@ axios.create = function create(config) {
 axios.CancelToken = CancelToken
 axios.Cancel = Cancel
 axios.isCancel = isCancel
+
+// axios是AxiosStatic类型，可自动推断出all方法参数promises的类型
+// all方法就是对Promise.all的封装
+axios.all = function all(promises) {
+  return Promise.all(promises)
+}
+
+// 接收一个函数，返回一个新的函数，新函数的结构满足then函数的参数结构
+axios.spread = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr)
+  }
+}
+
+axios.Axios = Axios
 
 export default axios

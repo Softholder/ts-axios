@@ -34,7 +34,7 @@ function processConfig(config: AxiosRequestConfig): void {
 }
 
 // 处理url及params的函数
-function transformURL(config: AxiosRequestConfig): string {
+export function transformURL(config: AxiosRequestConfig): string {
   let { url, params, paramsSerializer, baseURL } = config
   // 若配置了baseURL且传入的url不是绝对URL则将两个做拼接
   if (baseURL && !isAbsoluteURL(url!)) {

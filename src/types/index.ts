@@ -101,6 +101,9 @@ export interface Axios {
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  // getUri方法在不发送请求的前提下根据传入的配置返回一个 url
+  getUri(config: AxiosRequestConfig): string
 }
 
 // 混合对象，既有属性方法又为函数类型
@@ -112,6 +115,11 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+// 创建Axios对象的静态方法
+export interface AxiosClassStatic {
+  new (config: AxiosRequestConfig): Axios
+}
+
 // Axios静态方法接口类型，创建Axios实例
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
@@ -120,6 +128,13 @@ export interface AxiosStatic extends AxiosInstance {
   CancelToken: CancelTokenStatic
   Cancel: CancelStatic
   isCancel: (value: any) => boolean
+  // all方法一次调用多个请求函数（是Promise.all的封装，它返回的是一个Promise数组）
+  all<T>(promises: Array<T | Promise<T>>): Promise<T[]>
+  // spread方法接收一个函数，返回一个新的函数，新函数的结构满足 `then` 函数的参数结构
+  // T为参数类型，R为返回值类型
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R
+  // 返回Axios对象的静态方法
+  Axios: AxiosClassStatic
 }
 
 // 拦截器接口类型
