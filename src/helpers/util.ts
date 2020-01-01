@@ -23,6 +23,11 @@ export function isFormData(val: any): val is FormData {
   return typeof val !== 'undefined' && val instanceof FormData
 }
 
+// 判断是否为URLSearchParams类型(queryString序列化之后的类型)
+export function isURLSearchParams(val: any): val is URLSearchParams {
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
+}
+
 export function extend<T, U>(to: T, from: U): T & U {
   for (const key in from) {
     // to断言为T & U类型以便赋值，括号开始前须有;

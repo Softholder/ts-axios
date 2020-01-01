@@ -44,6 +44,10 @@ export interface AxiosRequestConfig {
   auth?: AxiosBasicCredentials
   // 验证状态码是否合法
   validateStatus?: (status: number) => boolean
+  // 自定义参数序列化
+  paramsSerializer?: (params: any) => string
+  // 若配置baseURL则后续传入的相对路径会与之拼接成为绝对路径
+  baseURL?: string
 
   [propName: string]: any
 }

@@ -1,7 +1,7 @@
 // 定义axios
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
-import { buildURL } from '../helpers/url'
+import { buildURL, isAbsoluteURL, combineURL } from '../helpers/url'
 // import { transformRequest, transformReponse } from '../helpers/data'
 // import { processHeaders, flattenHeaders } from '../helpers/headers'
 import { flattenHeaders } from '../helpers/headers'
@@ -35,8 +35,12 @@ function processConfig(config: AxiosRequestConfig): void {
 
 // 处理url及params的函数
 function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url!, params)
+  let { url, params, paramsSerializer, baseURL } = config
+  // 若配置了baseURL且传入的url不是绝对URL则将两个做拼接
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
+  return buildURL(url!, params, paramsSerializer)
 }
 
 // function transformRequestData(config: AxiosRequestConfig): any {
