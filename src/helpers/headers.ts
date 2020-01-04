@@ -35,14 +35,14 @@ export function parseHeaders(headers: string): any {
 
   // 将headers由字符串处理为对象
   headers.split('\r\n').forEach(line => {
-    let [key, val] = line.split(':')
+    // 考虑日期格式存在多个':'的情况
+    let [key, ...vals] = line.split(':')
     key = key.trim().toLowerCase()
     if (!key) {
       return
     }
-    if (val) {
-      val = val.trim()
-    }
+    // 只将第一个':'前后的字符串作为key和value
+    const val = vals.join(':').trim()
     parsed[key] = val
   })
 

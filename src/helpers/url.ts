@@ -99,7 +99,7 @@ export function buildURL(
 // 判断URL是否为绝对路径
 export function isAbsoluteURL(url: string): boolean {
   // 以字母，字母数字+-.开头，中间是:(该部分可有可无，？表示出现0次或1次),然后是两个/
-  return /(^[a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
 }
 
 // 将baseURL与传入的相对URL做拼接

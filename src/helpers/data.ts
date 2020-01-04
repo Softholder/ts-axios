@@ -9,7 +9,7 @@ export function transformRequest(data: any): any {
   return data
 }
 
-export function transformReponse(data: any): any {
+export function transformResponse(data: any): any {
   // 不一定是JSON字符串，用try catch包裹起来
   if (typeof data === 'string') {
     try {
