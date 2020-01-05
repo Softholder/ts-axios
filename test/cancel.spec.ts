@@ -81,6 +81,7 @@ describe('cancel', () => {
         })
         .then(() => {
           window.addEventListener('unhandledrejection', () => {
+            // done.fail表示异常的结束
             done.fail('Unhandled rejection.')
           })
           source.cancel()
