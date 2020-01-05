@@ -8,7 +8,7 @@ import {
 } from '../../src/helpers/util'
 
 // describe方法用来定义一组测试，可以支持嵌套
-describe('helpers/:util', () => {
+describe('helpers:util', () => {
   describe('isXX', () => {
     // test函数用来定义单个测试用例，是测试的最小单元
     test('should validate Date', () => {

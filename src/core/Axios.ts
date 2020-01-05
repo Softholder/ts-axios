@@ -49,6 +49,8 @@ export default class Axios {
     }
 
     config = mergeConfig(this.defaults, config)
+    // 将config中的method强制转为小写
+    config.method = config.method.toLowerCase()
 
     // 类型既可能是AxiosRequestConfig又可能是AxiosPromise，写为any类型
     const chain: PromiseChain<any>[] = [

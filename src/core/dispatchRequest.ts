@@ -2,7 +2,7 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
 import { buildURL, isAbsoluteURL, combineURL } from '../helpers/url'
-// import { transformRequest, transformReponse } from '../helpers/data'
+import { transformRequest, transformResponse } from '../helpers/data'
 // import { processHeaders, flattenHeaders } from '../helpers/headers'
 import { flattenHeaders } from '../helpers/headers'
 
@@ -17,9 +17,17 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
   // 调用完xhr后对响应数据再做一次处理
   processConfig(config)
   // 在dispatchRequest函数中将请求config处理为响应res
-  return xhr(config).then(res => {
-    return transformResponseData(res)
-  })
+  return xhr(config).then(
+    res => {
+      return transformResponseData(res)
+    },
+    e => {
+      if (e && e.response) {
+        e.response = transformResponseData(e.response)
+      }
+      return Promise.reject(e)
+    }
+  )
 }
 
 // 处理config中的url，params,data
@@ -55,9 +63,9 @@ export function transformURL(config: AxiosRequestConfig): string {
 
 // 将响应中的数据做处理，JSON字符串默认解析为对象
 function transformResponseData(res: AxiosResponse): AxiosResponse {
-  // res.data = transformReponse(res.data)
+  res.data = transformResponse(res.data)
   // 通过transform处理响应数据
-  res.data = transform(res.data, res.headers, res.config.transformResponse)
+  // res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
 }
 

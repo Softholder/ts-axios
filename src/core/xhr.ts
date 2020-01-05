@@ -100,7 +100,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
       // 处理超时
       request.ontimeout = function handleTimeout() {
-        reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
+        reject(createError(`Timeout of ${timeout}ms exceeded`, config, 'ECONNABORTED', request))
       }
 
       // 在发送请求前，给xhr对象添加属性

@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from './types'
 import { processHeaders } from './helpers/headers'
-import { transformRequest, transformReponse } from './helpers/data'
+import { transformRequest, transformResponse } from './helpers/data'
 
 // 默认请求配置类型
 const defaults: AxiosRequestConfig = {
@@ -23,7 +23,7 @@ const defaults: AxiosRequestConfig = {
   transformReponse: [
     function(data: any): any {
       // 直接返回处理后的响应数据
-      return transformReponse(data)
+      return transformResponse(data)
     }
   ],
 
