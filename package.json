@@ -1,8 +1,8 @@
 {
-  "name": "ts-axios",
-  "version": "0.0.0",
+  "name": "ts-axios-brandnew",
+  "version": "1.0.0",
   "description": "",
-  "keywords": [],
+  "keywords": ["typescript", "ts", "axios"],
   "main": "dist/ts-axios.umd.js",
   "module": "dist/ts-axios.es5.js",
   "typings": "dist/types/ts-axios.d.ts",
@@ -33,7 +33,9 @@
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
     "travis-deploy-once": "travis-deploy-once",
-    "dev": "node examples/server.js"
+    "dev": "node examples/server.js",
+    "prepub":"npm run test:prod && npm run build",
+    "pub": "sh release.sh"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [

@@ -151,12 +151,19 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     function processCancel(): void {
       // config中存在cancelToken时取消请求
       if (cancelToken) {
-        cancelToken.promise.then(reason => {
-          // 取消请求
-          request.abort()
-          // 通过promise的reject函数将reason传出，catch时可捕获到错误
-          reject(reason)
-        })
+        cancelToken.promise
+          .then(reason => {
+            // 取消请求
+            request.abort()
+            // 通过promise的reject函数将reason传出，catch时可捕获到错误
+            reject(reason)
+          })
+          .catch(
+            /* istanbul ignore next */
+            () => {
+              // do nothing
+            }
+          )
       }
     }
 
