@@ -20,7 +20,7 @@ const defaults: AxiosRequestConfig = {
       return transformRequest(data)
     }
   ],
-  transformReponse: [
+  transformResponse: [
     function(data: any): any {
       // 直接返回处理后的响应数据
       return transformResponse(data)
