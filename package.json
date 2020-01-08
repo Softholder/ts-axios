@@ -1,6 +1,6 @@
 {
   "name": "ts_axios",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "keywords": ["typescript", "ts", "axios"],
   "main": "dist/ts-axios.umd.js",
